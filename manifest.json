@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Better CardMarket",
+  "version": "1.1",
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": ["https://www.cardmarket.com/en/Magic/Wants/*/*"]
+    }
+  ]
+}
