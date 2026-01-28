@@ -16,6 +16,7 @@ import {
   clearExpansionSelectionUI,
   waitForExpansionOptionsReady,
 } from "./expansions";
+import { getSettings } from "./settings";
 
 type ToastUI = ProgressUI & { close: () => void; disableCancel: () => void };
 
@@ -29,15 +30,15 @@ const processDeckEntries = async (
   if (!form) return;
 
   const searchInput = findCardSearchInput();
-  const qtyInput = document.getElementById("WantsQuantity") as
-    | HTMLInputElement
-    | null;
-  const addButton = form.querySelector('button[type="submit"]') as
-    | HTMLButtonElement
-    | null;
-  const metacardInput = document.getElementById("IdMetacardInput") as
-    | HTMLInputElement
-    | null;
+  const qtyInput = document.getElementById(
+    "WantsQuantity",
+  ) as HTMLInputElement | null;
+  const addButton = form.querySelector(
+    'button[type="submit"]',
+  ) as HTMLButtonElement | null;
+  const metacardInput = document.getElementById(
+    "IdMetacardInput",
+  ) as HTMLInputElement | null;
 
   if (!searchInput || !qtyInput || !addButton || !metacardInput) {
     console.warn(LOG_PREFIX, "Required inputs not found", {
@@ -138,7 +139,9 @@ const processDeckEntries = async (
     });
 
     // Now apply your selection logic
-    autoSelectExpansions();
+    if (getSettings().autoSelectOnAutoList) {
+      autoSelectExpansions();
+    }
 
     // Let UI settle
     await sleep(100);

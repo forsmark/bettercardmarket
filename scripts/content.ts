@@ -1,12 +1,19 @@
 import { attachAutoSelectButton } from "./expansions";
 import { attachAutoListButton } from "./auto_list";
+import { initSettings } from "./settings";
 
-// Entry point for content scripts.
-attachAutoSelectButton();
-attachAutoListButton();
+const start = async (): Promise<void> => {
+  await initSettings();
 
-const obs = new MutationObserver(() => {
+  // Entry point for content scripts.
   attachAutoSelectButton();
   attachAutoListButton();
-});
-obs.observe(document.documentElement, { subtree: true, childList: true });
+
+  const obs = new MutationObserver(() => {
+    attachAutoSelectButton();
+    attachAutoListButton();
+  });
+  obs.observe(document.documentElement, { subtree: true, childList: true });
+};
+
+void start();

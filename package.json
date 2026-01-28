@@ -4,9 +4,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "npm run build:content && npm run build:options",
+    "build:content": "vite build -c vite.content.config.js",
+    "build:options": "vite build",
     "format": "prettier --write .",
-    "lint": "eslint scripts/**/*.ts",
+    "lint": "eslint .",
     "prepare": "husky install",
     "typecheck": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,6 +27,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/chrome": "^0.1.36",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",

@@ -1,8 +1,5 @@
-import {
-  backgroundPositionRegex,
-  excludedExpansions,
-  LOG_PREFIX,
-} from "./constants";
+import { backgroundPositionRegex, LOG_PREFIX } from "./constants";
+import { getSettings } from "./settings";
 import { debugLog, sleep } from "./utils";
 
 const getSelectedNode = (
@@ -75,10 +72,9 @@ export const autoSelectExpansions = (evt?: Event) => {
     const expansionId = li.getAttribute("data-option-value");
     if (!expansionId) return;
 
-    const excluded = excludedExpansions.some((bad) =>
-      expansionName.includes(bad),
-    );
-    if (excluded) return;
+    const { excludedExpansions: excluded } = getSettings();
+    const isExcluded = excluded.some((bad) => expansionName.includes(bad));
+    if (isExcluded) return;
 
     counter++;
     goodExpansions.set(expansionId, expansionName);

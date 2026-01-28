@@ -3,6 +3,11 @@
   "name": "Better CardMarket",
   "description": "Enhances the CardMarket experience with additional features and improvements.",
   "version": "2.0.0",
+  "permissions": ["storage"],
+  "options_ui": {
+    "page": "dist/options.html",
+    "open_in_tab": true
+  },
   "content_scripts": [
     {
       "js": ["dist/content.js"],

@@ -5,18 +5,14 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  base: "./",
   build: {
     outDir: "dist",
-    emptyOutDir: true,
+    emptyOutDir: false,
     sourcemap: true,
     target: "chrome100",
     rollupOptions: {
-      input: path.resolve(__dirname, "scripts/content.ts"),
-      output: {
-        format: "iife",
-        entryFileNames: "content.js",
-        inlineDynamicImports: true,
-      },
+      input: path.resolve(__dirname, "options.html"),
     },
   },
 });

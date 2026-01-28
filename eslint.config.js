@@ -3,7 +3,8 @@ import tsParser from "@typescript-eslint/parser";
 
 export default [
   {
-    files: ["scripts/**/*.ts"],
+    files: ["scripts/**/*.ts", "options.ts"],
+    ignores: ["dist/**"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
