@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "lint": "eslint scripts/*.js",
+    "lint": "eslint scripts/**/*.ts",
+    "typecheck": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +14,10 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
     "vite": "^6.4.1"
   }
 }

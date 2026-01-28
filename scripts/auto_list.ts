@@ -1,30 +1,43 @@
-import { LOG_PREFIX } from "./constants.js";
+import { LOG_PREFIX } from "./constants";
 import {
   clickTopSearchResult,
   debugLog,
+  type DeckEntry,
   findCardSearchInput,
   parseDecklist,
+  type ProgressUI,
   setProgressUI,
   sleep,
   triggerSearch,
   waitFor,
-} from "./utils.js";
+} from "./utils";
 import {
   autoSelectExpansions,
   clearExpansionSelectionUI,
   waitForExpansionOptionsReady,
-} from "./expansions.js";
+} from "./expansions";
+
+type ToastUI = ProgressUI & { close: () => void; disableCancel: () => void };
 
 let AUTO_LIST_CANCELLED = false;
 
-const processDeckEntries = async (entries, ui) => {
+const processDeckEntries = async (
+  entries: DeckEntry[],
+  ui: ProgressUI,
+): Promise<void> => {
   const form = document.getElementById("AddCardForm");
   if (!form) return;
 
   const searchInput = findCardSearchInput();
-  const qtyInput = document.getElementById("WantsQuantity");
-  const addButton = form.querySelector('button[type="submit"]');
-  const metacardInput = document.getElementById("IdMetacardInput");
+  const qtyInput = document.getElementById("WantsQuantity") as
+    | HTMLInputElement
+    | null;
+  const addButton = form.querySelector('button[type="submit"]') as
+    | HTMLButtonElement
+    | null;
+  const metacardInput = document.getElementById("IdMetacardInput") as
+    | HTMLInputElement
+    | null;
 
   if (!searchInput || !qtyInput || !addButton || !metacardInput) {
     console.warn(LOG_PREFIX, "Required inputs not found", {
@@ -150,7 +163,7 @@ const processDeckEntries = async (entries, ui) => {
   debugLog("Completed all entries");
 };
 
-const openAutoListModal = () => {
+const openAutoListModal = (): void => {
   AUTO_LIST_CANCELLED = false;
 
   const backdrop = document.createElement("div");
@@ -229,7 +242,7 @@ const openAutoListModal = () => {
 
   closeBtn.addEventListener("click", close);
   cancelBtn.addEventListener("click", close);
-  backdrop.addEventListener("click", (e) => {
+  backdrop.addEventListener("click", (e: MouseEvent) => {
     if (e.target === backdrop) close();
   });
 
@@ -259,7 +272,7 @@ const openAutoListModal = () => {
   textarea.focus();
 };
 
-export const attachAutoListButton = () => {
+export const attachAutoListButton = (): boolean => {
   const searchInput = findCardSearchInput();
   if (!searchInput) return false;
 
@@ -272,7 +285,7 @@ export const attachAutoListButton = () => {
   btn.className = "btn btn-success btn-sm";
   btn.setAttribute("data-mt-auto-list-button", "1");
 
-  btn.addEventListener("click", (e) => {
+  btn.addEventListener("click", (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     openAutoListModal();
@@ -288,7 +301,9 @@ export const attachAutoListButton = () => {
   }
 
   // Avoid re-wrapping if already done
-  let flexRow = wrapper.querySelector('[data-mt-search-row="1"]');
+  let flexRow = wrapper.querySelector<HTMLDivElement>(
+    '[data-mt-search-row="1"]',
+  );
   if (!flexRow) {
     flexRow = document.createElement("div");
     flexRow.setAttribute("data-mt-search-row", "1");
@@ -310,7 +325,7 @@ export const attachAutoListButton = () => {
   return true;
 };
 
-const createProgressToast = (total) => {
+const createProgressToast = (total: number): ToastUI => {
   const wrap = document.createElement("div");
   wrap.setAttribute("data-mt-auto-list-toast", "1");
   wrap.style.cssText =

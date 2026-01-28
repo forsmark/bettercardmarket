@@ -1,9 +1,13 @@
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
+
 export default [
   {
-    files: ["scripts/**/*.js"],
+    files: ["scripts/**/*.ts"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
+      parser: tsParser,
       globals: {
         window: "readonly",
         document: "readonly",
@@ -17,9 +21,13 @@ export default [
         clearInterval: "readonly",
       },
     },
+    plugins: {
+      "@typescript-eslint": tseslint,
+    },
     rules: {
-      "no-undef": "error",
-      "no-unused-vars": ["error", { args: "none" }],
+      "no-undef": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error", { args: "none" }],
       "no-constant-condition": "warn",
     },
   },

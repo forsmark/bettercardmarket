@@ -2,10 +2,14 @@ import {
   backgroundPositionRegex,
   excludedExpansions,
   LOG_PREFIX,
-} from "./constants.js";
-import { debugLog, sleep } from "./utils.js";
+} from "./constants";
+import { debugLog, sleep } from "./utils";
 
-const getSelectedNode = (expansionId, expansionName, iconPosition) => {
+const getSelectedNode = (
+  expansionId: string,
+  expansionName: string,
+  iconPosition: { x: string; y: string } | undefined,
+): HTMLAnchorElement => {
   const node = document.createElement("a");
   node.href = "#";
   node.className = "selected-item";
@@ -37,7 +41,7 @@ const getSelectedNode = (expansionId, expansionName, iconPosition) => {
   return node;
 };
 
-export const autoSelectExpansions = (evt) => {
+export const autoSelectExpansions = (evt?: Event) => {
   if (evt) {
     evt.preventDefault();
     evt.stopPropagation();
@@ -148,7 +152,7 @@ export const autoSelectExpansions = (evt) => {
   select.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-export const attachAutoSelectButton = () => {
+export const attachAutoSelectButton = (): boolean => {
   const label = Array.from(document.querySelectorAll("label")).find(
     (node) => node.getAttribute("for") === "WantsExpansion",
   );
@@ -176,7 +180,7 @@ export const attachAutoSelectButton = () => {
   return true;
 };
 
-export const clearExpansionSelectionUI = () => {
+export const clearExpansionSelectionUI = (): void => {
   const comboBox = document.getElementById("WantsExpansion");
   if (!comboBox) return;
 
@@ -211,7 +215,11 @@ export const waitForExpansionOptionsReady = async ({
   minCount = 10,
   stableMs = 350,
   timeoutMs = 10000,
-} = {}) => {
+}: {
+  minCount?: number;
+  stableMs?: number;
+  timeoutMs?: number;
+} = {}): Promise<boolean> => {
   const comboBox = document.getElementById("WantsExpansion");
   if (!comboBox) return false;
 

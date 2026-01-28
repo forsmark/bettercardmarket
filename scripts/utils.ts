@@ -1,11 +1,21 @@
-import { DEBUG_MODE, LOG_PREFIX } from "./constants.js";
+import { DEBUG_MODE, LOG_PREFIX } from "./constants";
 
-export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+export type DeckEntry = { qty: number; name: string };
 
-export const waitFor = async (
-  fn,
-  { timeoutMs = 10000, intervalMs = 100 } = {},
-) => {
+export type ProgressUI = {
+  status?: HTMLElement;
+  count?: HTMLElement;
+  bar?: HTMLElement;
+  close?: () => void;
+  disableCancel?: () => void;
+};
+
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+export const waitFor = async <T>(
+  fn: () => T | null | undefined,
+  { timeoutMs = 10000, intervalMs = 100 }: { timeoutMs?: number; intervalMs?: number } = {},
+): Promise<T | null> => {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     try {
@@ -17,7 +27,7 @@ export const waitFor = async (
   return null;
 };
 
-export const parseDecklist = (text) => {
+export const parseDecklist = (text: string): DeckEntry[] => {
   const entries = text
     .split(/\r?\n/)
     .map((l) => l.trim())
@@ -34,19 +44,21 @@ export const parseDecklist = (text) => {
   return entries;
 };
 
-export const findCardSearchInput = () => {
+export const findCardSearchInput = (): HTMLInputElement | null => {
   const byId = document.getElementById("WantsCardSearch");
-  if (byId) return byId;
+  if (byId instanceof HTMLInputElement) return byId;
 
   const byPlaceholder = document.querySelector(
     'input[type="text"][placeholder*="card name" i]',
   );
-  if (byPlaceholder) return byPlaceholder;
+  if (byPlaceholder instanceof HTMLInputElement) return byPlaceholder;
 
   const form = document.getElementById("AddCardForm");
   if (!form) return null;
 
-  const candidates = Array.from(form.querySelectorAll('input[type="text"]'));
+  const candidates = Array.from(
+    form.querySelectorAll<HTMLInputElement>('input[type="text"]'),
+  );
   const filtered = candidates.filter(
     (i) =>
       i.name !== "idProductTempInput" &&
@@ -56,7 +68,10 @@ export const findCardSearchInput = () => {
   return filtered[0] || null;
 };
 
-export const triggerSearch = async (input, text) => {
+export const triggerSearch = async (
+  input: HTMLInputElement,
+  text: string,
+): Promise<void> => {
   debugLog("triggerSearch()", { text });
 
   const nativeSetter = Object.getOwnPropertyDescriptor(
@@ -93,7 +108,9 @@ export const triggerSearch = async (input, text) => {
   input.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, key: " " }));
 };
 
-export const clickTopSearchResult = async (expectedName) => {
+export const clickTopSearchResult = async (
+  expectedName: string,
+): Promise<boolean> => {
   const expected = (expectedName || "").toLowerCase().trim();
   debugLog("clickTopSearchResult() called", { expected });
 
@@ -125,7 +142,9 @@ export const clickTopSearchResult = async (expectedName) => {
   const suggestionToClick = await waitFor(
     () => {
       const items = Array.from(
-        container.querySelectorAll("a.autocomplete-link.dropdown-item"),
+        container.querySelectorAll<HTMLAnchorElement>(
+          "a.autocomplete-link.dropdown-item",
+        ),
       ).filter((a) => {
         const r = a.getBoundingClientRect();
         return r.width > 0 && r.height > 0;
@@ -174,7 +193,10 @@ export const clickTopSearchResult = async (expectedName) => {
   return true;
 };
 
-export const setProgressUI = (ui, { index, total, text }) => {
+export const setProgressUI = (
+  ui: ProgressUI | null | undefined,
+  { index, total, text }: { index: number; total: number; text?: string },
+) => {
   if (!ui) return;
   const pct = total > 0 ? Math.round(((index + 1) / total) * 100) : 0;
   if (ui.status) ui.status.textContent = text || "";
@@ -183,7 +205,7 @@ export const setProgressUI = (ui, { index, total, text }) => {
   if (ui.bar) ui.bar.setAttribute("aria-valuenow", String(pct));
 };
 
-export const debugLog = (...args) => {
+export const debugLog = (...args: unknown[]) => {
   if (!DEBUG_MODE) return;
 
   console.log(LOG_PREFIX, ...args);
