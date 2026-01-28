@@ -1,0 +1,19 @@
+{
+  "name": "bettercardmarket-3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint scripts/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "vite": "^6.4.1"
+  }
+}

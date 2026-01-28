@@ -5,13 +5,7 @@
   "version": "2.0.0",
   "content_scripts": [
     {
-      "js": [
-        "scripts/constants.js",
-        "scripts/utils.js",
-        "scripts/expansions.js",
-        "scripts/auto_list.js",
-        "scripts/content.js"
-      ],
+      "js": ["dist/content.js"],
       "matches": ["https://www.cardmarket.com/en/Magic/Wants/*/*"]
     }
   ]

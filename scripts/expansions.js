@@ -1,3 +1,10 @@
+import {
+  backgroundPositionRegex,
+  excludedExpansions,
+  LOG_PREFIX,
+} from "./constants.js";
+import { debugLog, sleep } from "./utils.js";
+
 const getSelectedNode = (expansionId, expansionName, iconPosition) => {
   const node = document.createElement("a");
   node.href = "#";
@@ -30,7 +37,7 @@ const getSelectedNode = (expansionId, expansionName, iconPosition) => {
   return node;
 };
 
-const autoSelectExpansions = (evt) => {
+export const autoSelectExpansions = (evt) => {
   if (evt) {
     evt.preventDefault();
     evt.stopPropagation();
@@ -141,7 +148,7 @@ const autoSelectExpansions = (evt) => {
   select.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-const attachAutoSelectButton = () => {
+export const attachAutoSelectButton = () => {
   const label = Array.from(document.querySelectorAll("label")).find(
     (node) => node.getAttribute("for") === "WantsExpansion",
   );
@@ -169,7 +176,7 @@ const attachAutoSelectButton = () => {
   return true;
 };
 
-const clearExpansionSelectionUI = () => {
+export const clearExpansionSelectionUI = () => {
   const comboBox = document.getElementById("WantsExpansion");
   if (!comboBox) return;
 
@@ -200,7 +207,7 @@ const clearExpansionSelectionUI = () => {
   }
 };
 
-const waitForExpansionOptionsReady = async ({
+export const waitForExpansionOptionsReady = async ({
   minCount = 10,
   stableMs = 350,
   timeoutMs = 10000,
@@ -227,7 +234,7 @@ const waitForExpansionOptionsReady = async ({
       if (countNow === lastCount) {
         if (!stableSince) stableSince = Date.now();
         if (Date.now() - stableSince >= stableMs) {
-          console.log(LOG_PREFIX, "Expansion options ready", {
+          debugLog("Expansion options ready", {
             liCount,
             optCount,
           });

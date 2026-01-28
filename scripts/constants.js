@@ -1,4 +1,4 @@
-const excludedExpansions = [
+export const excludedExpansions = [
   //Ugly
   "Universes Beyond",
   "Extras",
@@ -35,7 +35,8 @@ const excludedExpansions = [
   "Japanese",
 ];
 
-const backgroundPositionRegex =
+export const backgroundPositionRegex =
   /background-position:\s*([-\d.]+px)\s+([-\d.]+px);/;
 
-const LOG_PREFIX = "[BetterCardMarket AutoList]";
+export const LOG_PREFIX = "[BetterCardMarket AutoList]";
+export const DEBUG_MODE = false;

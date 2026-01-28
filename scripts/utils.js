@@ -1,18 +1,23 @@
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+import { DEBUG_MODE, LOG_PREFIX } from "./constants.js";
 
-const waitFor = async (fn, { timeoutMs = 10000, intervalMs = 100 } = {}) => {
+export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+export const waitFor = async (
+  fn,
+  { timeoutMs = 10000, intervalMs = 100 } = {},
+) => {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     try {
       const val = fn();
       if (val) return val;
-    } catch (_) {}
+    } catch {}
     await sleep(intervalMs);
   }
   return null;
 };
 
-const parseDecklist = (text) => {
+export const parseDecklist = (text) => {
   const entries = text
     .split(/\r?\n/)
     .map((l) => l.trim())
@@ -25,11 +30,11 @@ const parseDecklist = (text) => {
     })
     .filter((e) => e.name.length > 0 && Number.isFinite(e.qty) && e.qty > 0);
 
-  console.log(LOG_PREFIX, "Parsed decklist entries", entries);
+  debugLog("Parsed decklist entries", entries);
   return entries;
 };
 
-const findCardSearchInput = () => {
+export const findCardSearchInput = () => {
   const byId = document.getElementById("WantsCardSearch");
   if (byId) return byId;
 
@@ -51,8 +56,8 @@ const findCardSearchInput = () => {
   return filtered[0] || null;
 };
 
-const triggerSearch = async (input, text) => {
-  console.log(LOG_PREFIX, "triggerSearch()", { text });
+export const triggerSearch = async (input, text) => {
+  debugLog("triggerSearch()", { text });
 
   const nativeSetter = Object.getOwnPropertyDescriptor(
     window.HTMLInputElement.prototype,
@@ -88,9 +93,9 @@ const triggerSearch = async (input, text) => {
   input.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true, key: " " }));
 };
 
-const clickTopSearchResult = async (expectedName) => {
+export const clickTopSearchResult = async (expectedName) => {
   const expected = (expectedName || "").toLowerCase().trim();
-  console.log(LOG_PREFIX, "clickTopSearchResult() called", { expected });
+  debugLog("clickTopSearchResult() called", { expected });
 
   const container = await waitFor(
     () => {
@@ -127,7 +132,7 @@ const clickTopSearchResult = async (expectedName) => {
       });
 
       const texts = items.map((a) => (a.textContent || "").trim());
-      console.log(LOG_PREFIX, "Autocomplete suggestions in container", texts);
+      debugLog("Autocomplete suggestions in container", texts);
 
       if (!items.length) return null;
       if (!expected) return items[0];
@@ -169,11 +174,17 @@ const clickTopSearchResult = async (expectedName) => {
   return true;
 };
 
-const setProgressUI = (ui, { index, total, text }) => {
+export const setProgressUI = (ui, { index, total, text }) => {
   if (!ui) return;
   const pct = total > 0 ? Math.round(((index + 1) / total) * 100) : 0;
   if (ui.status) ui.status.textContent = text || "";
   if (ui.count) ui.count.textContent = `${Math.min(index + 1, total)}/${total}`;
   if (ui.bar) ui.bar.style.width = `${pct}%`;
   if (ui.bar) ui.bar.setAttribute("aria-valuenow", String(pct));
+};
+
+export const debugLog = (...args) => {
+  if (!DEBUG_MODE) return;
+
+  console.log(LOG_PREFIX, ...args);
 };

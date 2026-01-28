@@ -1,3 +1,20 @@
+import { LOG_PREFIX } from "./constants.js";
+import {
+  clickTopSearchResult,
+  debugLog,
+  findCardSearchInput,
+  parseDecklist,
+  setProgressUI,
+  sleep,
+  triggerSearch,
+  waitFor,
+} from "./utils.js";
+import {
+  autoSelectExpansions,
+  clearExpansionSelectionUI,
+  waitForExpansionOptionsReady,
+} from "./expansions.js";
+
 let AUTO_LIST_CANCELLED = false;
 
 const processDeckEntries = async (entries, ui) => {
@@ -19,7 +36,7 @@ const processDeckEntries = async (entries, ui) => {
     return;
   }
 
-  console.log(LOG_PREFIX, "Starting processDeckEntries", { entries });
+  debugLog("Starting processDeckEntries", { entries });
 
   for (let idx = 0; idx < entries.length; idx++) {
     if (AUTO_LIST_CANCELLED) {
@@ -65,7 +82,7 @@ const processDeckEntries = async (entries, ui) => {
         total: entries.length,
         text: `No match for: ${expectedName} (skipped)`,
       });
-      await sleep(500);
+      await sleep(250);
       continue;
     }
 
@@ -75,7 +92,7 @@ const processDeckEntries = async (entries, ui) => {
       { timeoutMs: 10000, intervalMs: 100 },
     );
 
-    console.log(LOG_PREFIX, "Metacard change", {
+    debugLog("Metacard change", {
       expectedName,
       beforeId,
       afterId: metacardInput.value,
@@ -93,7 +110,7 @@ const processDeckEntries = async (entries, ui) => {
         total: entries.length,
         text: `Selection failed for: ${expectedName} (skipped)`,
       });
-      await sleep(500);
+      await sleep(250);
       continue;
     }
 
@@ -111,7 +128,7 @@ const processDeckEntries = async (entries, ui) => {
     autoSelectExpansions();
 
     // Let UI settle
-    await sleep(150);
+    await sleep(100);
 
     // 5) press Add Card
     setProgressUI(ui, {
@@ -121,7 +138,7 @@ const processDeckEntries = async (entries, ui) => {
     });
 
     addButton.click();
-    await sleep(750);
+    await sleep(250);
   }
 
   setProgressUI(ui, {
@@ -130,7 +147,7 @@ const processDeckEntries = async (entries, ui) => {
     text: "Done!",
   });
 
-  console.log(LOG_PREFIX, "Completed all entries");
+  debugLog("Completed all entries");
 };
 
 const openAutoListModal = () => {
@@ -220,7 +237,7 @@ const openAutoListModal = () => {
     const entries = parseDecklist(textarea.value);
     if (!entries.length) return;
 
-    console.log(LOG_PREFIX, "Start clicked — closing modal and starting run", {
+    debugLog("Start clicked — closing modal and starting run", {
       count: entries.length,
     });
 
@@ -233,7 +250,7 @@ const openAutoListModal = () => {
     try {
       await processDeckEntries(entries, ui);
       ui.disableCancel();
-      await sleep(1200);
+      await sleep(500);
     } finally {
       ui.close();
     }
@@ -242,7 +259,7 @@ const openAutoListModal = () => {
   textarea.focus();
 };
 
-const attachAutoListButton = () => {
+export const attachAutoListButton = () => {
   const searchInput = findCardSearchInput();
   if (!searchInput) return false;
 
