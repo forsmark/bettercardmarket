@@ -1,10 +1,17 @@
 {
   "manifest_version": 3,
   "name": "Better CardMarket",
-  "version": "1.1",
+  "description": "Enhances the CardMarket experience with additional features and improvements.",
+  "version": "2.0.0",
   "content_scripts": [
     {
-      "js": ["scripts/content.js"],
+      "js": [
+        "scripts/constants.js",
+        "scripts/utils.js",
+        "scripts/expansions.js",
+        "scripts/auto_list.js",
+        "scripts/content.js"
+      ],
       "matches": ["https://www.cardmarket.com/en/Magic/Wants/*/*"]
     }
   ]
