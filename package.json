@@ -5,9 +5,20 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
+    "format": "prettier --write .",
     "lint": "eslint scripts/**/*.ts",
+    "prepare": "husky install",
     "typecheck": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,html}": [
+      "prettier --write"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -17,6 +28,9 @@
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vite": "^6.4.1"
   }
