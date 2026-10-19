@@ -1,35 +1,43 @@
-import tseslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
+import js from "@eslint/js";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
-export default [
+export default defineConfig([
+  globalIgnores(["dist", "node_modules"]),
   {
-    files: ["scripts/**/*.ts", "options.ts"],
-    ignores: ["dist/**"],
+    files: ["**/*.{ts,tsx}"],
+    extends: [js.configs.recommended, tseslint.configs.recommendedTypeChecked],
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      parser: tsParser,
-      globals: {
-        window: "readonly",
-        document: "readonly",
-        console: "readonly",
-        Event: "readonly",
-        KeyboardEvent: "readonly",
-        MutationObserver: "readonly",
-        setTimeout: "readonly",
-        clearTimeout: "readonly",
-        setInterval: "readonly",
-        clearInterval: "readonly",
+      globals: { ...globals.browser, chrome: "readonly" },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
-    plugins: {
-      "@typescript-eslint": tseslint,
-    },
     rules: {
-      "no-undef": "off",
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": ["error", { args: "none" }],
-      "no-constant-condition": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+      "@typescript-eslint/consistent-type-imports": "error",
     },
   },
-];
+  {
+    files: ["src/options/**/*.tsx"],
+    extends: [
+      reactHooks.configs.flat["recommended-latest"],
+      reactRefresh.configs.vite,
+    ],
+  },
+  {
+    files: ["*.config.{js,ts}"],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    files: ["**/*.js"],
+    extends: [js.configs.recommended],
+  },
+]);
