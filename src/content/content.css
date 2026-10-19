@@ -12,8 +12,88 @@
   flex: 1 1 auto;
 }
 
-.bcm-search-row > button {
+.bcm-search-row > .bcm-split {
   flex: 0 0 auto;
+}
+
+/* Auto list split button and menu */
+
+.bcm-split {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.bcm-split > .btn:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.bcm-split__toggle.btn {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.45rem;
+  border-left: 1px solid rgb(0 0 0 / 0.25);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Downward arrow drawn with borders, so it needs no icon font. */
+.bcm-split__toggle::before {
+  content: "";
+  border-top: 5px solid currentColor;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.bcm-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 1050;
+  display: grid;
+  min-width: 220px;
+  padding: 4px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 8px;
+  background: #1b1f23;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.5);
+}
+
+.bcm-menu[hidden] {
+  display: none;
+}
+
+.bcm-menu__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: #fff;
+  font-size: 0.875rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.bcm-menu__item:hover:not(:disabled),
+.bcm-menu__item:focus-visible {
+  outline: none;
+  background: rgb(255 255 255 / 0.1);
+}
+
+.bcm-menu__item:disabled {
+  color: rgb(255 255 255 / 0.4);
+  cursor: default;
+}
+
+.bcm-menu__detail {
+  color: rgb(255 255 255 / 0.55);
+  font-size: 0.8rem;
 }
 
 /* Auto list dialog */
@@ -220,11 +300,9 @@
   color: rgb(255 255 255 / 0.4);
 }
 
-.bcm-price-summary {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 16px;
+.bcm-toolbar {
+  display: grid;
+  gap: 6px;
   margin: 12px 0;
   padding: 10px 14px;
   border: 1px solid rgb(255 255 255 / 0.14);
@@ -233,18 +311,42 @@
   font-size: 0.9rem;
 }
 
-.bcm-price-summary__total {
+.bcm-toolbar__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  min-height: 31px;
+}
+
+.bcm-toolbar__total {
   font-size: 1.05rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
-.bcm-price-summary__detail {
+.bcm-toolbar__total:empty {
+  display: none;
+}
+
+.bcm-toolbar__detail {
   color: rgb(255 255 255 / 0.75);
 }
 
-.bcm-price-summary__source {
+.bcm-toolbar__source {
   margin-left: auto;
   color: rgb(255 255 255 / 0.5);
   font-size: 0.8rem;
+}
+
+.bcm-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.bcm-toolbar__feedback {
+  color: #7bd59a;
+  font-size: 0.85rem;
 }

@@ -8,9 +8,12 @@ export default defineManifest({
     "Adds Auto Select and Auto list helpers to Cardmarket wants lists.",
   version: pkg.version,
   minimum_chrome_version: "120",
-  permissions: ["storage"],
+  // clipboardRead and offscreen let Auto list read a decklist from the
+  // clipboard without giving cardmarket.com clipboard access.
+  permissions: ["storage", "clipboardRead", "offscreen"],
   action: {
-    default_title: "Better CardMarket settings",
+    default_title: "Better CardMarket pocket",
+    default_popup: "src/popup/index.html",
   },
   background: {
     service_worker: "src/background/index.ts",

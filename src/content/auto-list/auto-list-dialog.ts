@@ -2,7 +2,26 @@ import { openOptionsPage } from "../../shared/messages";
 import { h } from "../lib/dom";
 import { type DeckEntry, parseDecklist } from "./decklist";
 
-export type AutoListRequest = { entries: DeckEntry[]; autoSelect: boolean };
+/** Where the decklist in the dialog came from. */
+export type DecklistSource =
+  "paste" | "clipboard" | "clipboard-failed" | "pocket";
+
+export type AutoListRequest = {
+  entries: DeckEntry[];
+  autoSelect: boolean;
+  source: DecklistSource;
+};
+
+const HELP: Record<DecklistSource, string> = {
+  paste:
+    "Paste a decklist with one card per line. Set codes, comments and section headers are ignored.",
+  clipboard:
+    "This is the text from your clipboard. Check it, then click Start.",
+  "clipboard-failed":
+    "Could not read the clipboard. Paste the decklist here with Ctrl+V or Cmd+V.",
+  pocket:
+    "These are the cards in your pocket. Cards that Auto list adds leave the pocket.",
+};
 
 const PLACEHOLDER = "4 Arbor Elf\n2x Lightning Bolt\n1 Sol Ring (CMM) 400";
 
@@ -19,9 +38,13 @@ const describe = (entries: readonly DeckEntry[]): string => {
  */
 export const openAutoListDialog = ({
   autoSelectDefault,
+  source = "paste",
+  initialText = "",
   onStart,
 }: {
   autoSelectDefault: boolean;
+  source?: DecklistSource;
+  initialText?: string;
   onStart: (request: AutoListRequest) => void;
 }): void => {
   const textarea = h("textarea", {
@@ -77,7 +100,7 @@ export const openAutoListDialog = ({
       h("div", { className: "bcm-dialog__body" }, [
         h("p", {
           className: "bcm-dialog__help",
-          text: "Paste a decklist with one card per line. Set codes, comments and section headers are ignored.",
+          text: HELP[source],
         }),
         textarea,
         h("div", { className: "bcm-dialog__meta" }, [
@@ -136,8 +159,11 @@ export const openAutoListDialog = ({
     event.preventDefault();
     if (!entries.length) return;
     close();
-    onStart({ entries, autoSelect: autoSelect.checked });
+    onStart({ entries, autoSelect: autoSelect.checked, source });
   });
+
+  textarea.value = initialText;
+  update();
 
   document.body.append(dialog);
   dialog.showModal();

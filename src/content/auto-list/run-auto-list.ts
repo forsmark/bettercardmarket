@@ -14,7 +14,7 @@ import {
   type MessageKind,
 } from "../cardmarket/page";
 import { dispatch, setInputValue, sleep, waitFor } from "../lib/dom";
-import { normalizeCardName } from "../../shared/card-names";
+import { frontFaceName, normalizeCardName } from "../../shared/card-names";
 import { chooseSuggestion, typeCardSearch } from "./card-search";
 import type { DeckEntry } from "./decklist";
 
@@ -111,7 +111,9 @@ const addEntry = async (
   const previousOptions = snapshotOptions();
   const previousId = requireForm().metacard.value;
 
-  await typeCardSearch(search, entry.name);
+  // Cardmarket's search does not always find "Front // Back" names, so
+  // type the front face and match the suggestion against the full name.
+  await typeCardSearch(search, frontFaceName(entry.name));
   const cardName = await chooseSuggestion(entry.name, signal);
   if (!cardName) throw new SkipEntry("No matching card");
   step("suggestion chosen");

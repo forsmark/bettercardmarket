@@ -8,6 +8,10 @@ export default defineConfig({
   build: {
     target: "chrome120",
     sourcemap: true,
+    rollupOptions: {
+      // The manifest does not list this page. The background worker opens it.
+      input: { offscreen: "src/offscreen/index.html" },
+    },
   },
   server: {
     // CRXJS serves extension pages and content scripts from this port in dev.

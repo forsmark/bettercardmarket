@@ -8,7 +8,7 @@ import { mountAutoListButton } from "./auto-list/auto-list";
 import { mountAutoSelectButton } from "./auto-select/auto-select";
 import { isWantsListPage } from "./cardmarket/page";
 import "./content.css";
-import { mountWantsPrices } from "./wants-prices/wants-prices";
+import { mountWantsList } from "./wants-list/wants-list";
 
 const main = async (): Promise<void> => {
   let settings: Settings = await loadSettings();
@@ -38,9 +38,9 @@ const main = async (): Promise<void> => {
 
   mount();
 
-  if (isWantsListPage() && settings.showPrices) {
-    mountWantsPrices().catch((error: unknown) =>
-      log.warn("Could not show prices", error),
+  if (isWantsListPage()) {
+    mountWantsList(settings).catch((error: unknown) =>
+      log.warn("Could not set up the wants list tools", error),
     );
   }
 };

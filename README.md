@@ -6,12 +6,16 @@ list it adds:
 - **Auto Select**: selects the expansions of the chosen card that pass your
   rules, up to a set limit.
 - **Auto list**: paste a decklist, and the extension adds each card to the
-  wants list. It can run Auto Select for each card.
+  wants list. It can run Auto Select for each card. The arrow next to the
+  button reads the list from the clipboard or from the pocket instead.
 
 On a wants list page it adds:
 
 - **Estimated prices**: a price for each want and a total for the list. See
   [Estimated prices](#estimated-prices).
+- **Selection total**: check wants to see the total of just those wants.
+- **Add to pocket**: collect the checked wants in the pocket. See
+  [Pocket](#pocket).
 
 The settings page controls which expansions Auto Select skips. Open it from
 the extension's toolbar button, from "Settings" in the Auto list dialog, or
@@ -50,6 +54,23 @@ want picks the foil or non-foil price.
 - Condition, language and the Signed and Altered settings do not change the
   estimate.
 
+## Pocket
+
+The pocket collects cards from several wants lists, so that you can add them
+to another list in one step.
+
+1. On a wants list, check the wants and click **Add to pocket**. Repeat on
+   other lists. Cards with the same name add up. The same want is not added
+   twice.
+2. Click the extension icon in the toolbar to see the pocket, its estimated
+   total and a **Copy list** button. Remove single cards or clear the pocket
+   there.
+3. On the Add cards page of the target list, choose **Auto list › From
+   pocket**. Check the list and click Start. Cards that Auto list adds leave
+   the pocket. Skipped cards stay.
+
+The pocket stays on this computer. It does not sync to other browsers.
+
 ## Development
 
 Requirements: Node.js 22.13 or later (see `.nvmrc`) and pnpm. Run
@@ -74,12 +95,15 @@ pnpm check    # type check, lint, format check and unit tests
 
 ```text
 manifest.config.ts       Extension manifest (MV3), built by @crxjs/vite-plugin
-src/background/          Service worker: opens the settings page
+src/background/          Service worker: Scryfall requests, opens settings
 src/content/             Content script on Cardmarket wants pages
   cardmarket/page.ts     All Cardmarket element ids and selectors
   auto-select/           Auto Select button and expansion picker code
   auto-list/             Decklist parser, dialog, progress toast and runner
+  wants-list/            Price column, selection and pocket button
 src/options/             Settings page (React)
+src/popup/               Toolbar popup with the pocket (React)
+src/ui/                  Theme and fonts of the settings page and popup
 src/shared/              Settings storage, expansion groups and rules
 ```
 
