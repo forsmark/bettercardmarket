@@ -1,4 +1,4 @@
-import { setDebugLogging } from "../shared/logger";
+import { log, setDebugLogging } from "../shared/logger";
 import {
   loadSettings,
   type Settings,
@@ -6,7 +6,9 @@ import {
 } from "../shared/settings";
 import { mountAutoListButton } from "./auto-list/auto-list";
 import { mountAutoSelectButton } from "./auto-select/auto-select";
+import { isWantsListPage } from "./cardmarket/page";
 import "./content.css";
+import { mountWantsPrices } from "./wants-prices/wants-prices";
 
 const main = async (): Promise<void> => {
   let settings: Settings = await loadSettings();
@@ -35,6 +37,12 @@ const main = async (): Promise<void> => {
   }).observe(document.body, { childList: true, subtree: true });
 
   mount();
+
+  if (isWantsListPage() && settings.showPrices) {
+    mountWantsPrices().catch((error: unknown) =>
+      log.warn("Could not show prices", error),
+    );
+  }
 };
 
 void main();

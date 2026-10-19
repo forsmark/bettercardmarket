@@ -18,6 +18,8 @@ export type Settings = {
   maxSelectedExpansions: number;
   /** Default for "Auto-select expansions" in the Auto list dialog. */
   autoSelectOnAutoList: boolean;
+  /** Show estimated prices on wants list pages. */
+  showPrices: boolean;
   /** Write detailed logs to the page console. */
   debugLogging: boolean;
 };
@@ -31,6 +33,7 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = Object.freeze({
   alwaysInclude: [],
   maxSelectedExpansions: 20,
   autoSelectOnAutoList: true,
+  showPrices: true,
   debugLogging: false,
 });
 
@@ -99,6 +102,7 @@ export const normalizeSettings = (stored: StoredSettings): Settings => ({
     stored.autoSelectOnAutoList,
     DEFAULT_SETTINGS.autoSelectOnAutoList,
   ),
+  showPrices: asBoolean(stored.showPrices, DEFAULT_SETTINGS.showPrices),
   debugLogging: asBoolean(stored.debugLogging, DEFAULT_SETTINGS.debugLogging),
 });
 

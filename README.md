@@ -8,6 +8,11 @@ list it adds:
 - **Auto list**: paste a decklist, and the extension adds each card to the
   wants list. It can run Auto Select for each card.
 
+On a wants list page it adds:
+
+- **Estimated prices**: a price for each want and a total for the list. See
+  [Estimated prices](#estimated-prices).
+
 The settings page controls which expansions Auto Select skips. Open it from
 the extension's toolbar button, from "Settings" in the Auto list dialog, or
 from `chrome://extensions`.
@@ -27,6 +32,23 @@ Auto Select checks each expansion name against three kinds of rules:
 A pattern matches when the expansion name contains it. Case does not matter.
 The settings page shows a preview of the rules against the expansion list of
 the last card that you used Auto Select on.
+
+## Estimated prices
+
+Each want gets the price of its cheapest allowed printing, times the quantity.
+A want with "Any" expansion allows every printing. The foil setting of the
+want picks the foil or non-foil price.
+
+- The prices are Cardmarket prices in euros from
+  [Scryfall](https://scryfall.com/docs/api), which updates them once a day.
+  Hover over a price to see the printing that it uses.
+- Cardmarket's list page does not show which printings a want allows, so the
+  extension reads each want's Edit page once. It reads the page again only
+  after you edit the want.
+- The extension caches prices for a day and want details for a week. Clear
+  the cache in the settings under General.
+- Condition, language and the Signed and Altered settings do not change the
+  estimate.
 
 ## Development
 

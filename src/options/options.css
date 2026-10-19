@@ -276,6 +276,11 @@ code {
   flex: none;
 }
 
+.section__body {
+  display: grid;
+  gap: 18px;
+}
+
 /* Form controls */
 
 .field {

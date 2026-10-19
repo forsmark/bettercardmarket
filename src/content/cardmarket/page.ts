@@ -97,3 +97,78 @@ export const findExpansionLabel = (): HTMLLabelElement | null =>
   document.querySelector<HTMLLabelElement>(
     `label[for="${IDS.expansionComboBox}"]`,
   );
+
+/** True on a single wants list, such as /en/Magic/Wants/25854112. */
+export const isWantsListPage = (): boolean =>
+  /^\/[a-z]{2}\/Magic\/Wants\/\d+\/?$/.test(window.location.pathname);
+
+/** The table of wants on a wants list page. */
+export const findWantsTable = (): HTMLTableElement | null =>
+  document
+    .querySelector('button[id^="deleteWant"]')
+    ?.closest<HTMLTableElement>("table") ?? null;
+
+/**
+ * Parts of one row in the wants table. The Edit link leads to a page with the
+ * product ids of the selected expansions.
+ */
+export type WantsTableRow = {
+  row: HTMLTableRowElement;
+  wantId: string;
+  editUrl: string;
+  cardName: string;
+  amount: number;
+  /** Changes when the user edits the want. */
+  signature: string;
+  /** New cells go before this cell. */
+  buyPriceCell: HTMLTableCellElement;
+};
+
+const tooltipText = (el: Element): string =>
+  el.getAttribute("aria-label") ??
+  el.getAttribute("data-bs-original-title") ??
+  el.getAttribute("data-bs-title") ??
+  el.getAttribute("title") ??
+  "";
+
+export const readWantsTableRows = (table: HTMLTableElement): WantsTableRow[] =>
+  Array.from(table.tBodies[0]?.rows ?? []).flatMap((row) => {
+    const wantId = row.querySelector<HTMLInputElement>(
+      'input[name="idWant"]',
+    )?.value;
+    const editLink = row.querySelector<HTMLAnchorElement>("td.action a[href]");
+    const cardName = row.querySelector("td.name a")?.textContent.trim();
+    const amount = Number(
+      row.querySelector("td.amount")?.getAttribute("data-amount"),
+    );
+    const buyPriceCell = row.querySelector<HTMLTableCellElement>("td.buyPrice");
+    if (!wantId || !editLink || !cardName || !buyPriceCell) return [];
+    if (!Number.isInteger(amount) || amount < 1) return [];
+
+    const expansions = Array.from(
+      row.querySelectorAll("td.expansion .expansion-symbol"),
+      tooltipText,
+    );
+    const flags = Array.from(row.querySelectorAll("td.min-size"), (td) =>
+      td.textContent.trim(),
+    );
+    const signature = [
+      amount,
+      cardName,
+      row.querySelector("td.expansion")?.textContent.trim(),
+      ...expansions,
+      ...flags,
+    ].join("|");
+
+    return [
+      {
+        row,
+        wantId,
+        editUrl: editLink.href,
+        cardName,
+        amount,
+        signature,
+        buyPriceCell,
+      },
+    ];
+  });

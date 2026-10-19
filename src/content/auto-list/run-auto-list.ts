@@ -14,11 +14,8 @@ import {
   type MessageKind,
 } from "../cardmarket/page";
 import { dispatch, setInputValue, sleep, waitFor } from "../lib/dom";
-import {
-  chooseSuggestion,
-  normalizeCardName,
-  typeCardSearch,
-} from "./card-search";
+import { normalizeCardName } from "../../shared/card-names";
+import { chooseSuggestion, typeCardSearch } from "./card-search";
 import type { DeckEntry } from "./decklist";
 
 export type SkippedEntry = DeckEntry & { reason: string };

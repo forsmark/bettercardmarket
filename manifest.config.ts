@@ -23,7 +23,8 @@ export default defineManifest({
   content_scripts: [
     {
       js: ["src/content/index.ts"],
-      matches: ["https://www.cardmarket.com/en/Magic/Wants/*/*"],
+      // A wants list (/Wants/<id>) and its "Add cards" page.
+      matches: ["https://www.cardmarket.com/en/Magic/Wants/*"],
     },
   ],
 });

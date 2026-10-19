@@ -1,3 +1,4 @@
+import { normalizeCardName } from "../../shared/card-names";
 import { log } from "../../shared/logger";
 import {
   AUTOCOMPLETE_ITEM_SELECTOR,
@@ -11,15 +12,6 @@ import {
   sleep,
   waitFor,
 } from "../lib/dom";
-
-/** Lowercases, removes accents and turns punctuation into single spaces. */
-export const normalizeCardName = (name: string): string =>
-  name
-    .normalize("NFKD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
 
 /**
  * Picks the suggestion that best matches `wanted`: an exact match first, then

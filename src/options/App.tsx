@@ -7,6 +7,7 @@ import {
 import { GroupList } from "./components/GroupList";
 import { NumberField } from "./components/NumberField";
 import { PatternListEditor } from "./components/PatternListEditor";
+import { PriceSettings } from "./components/PriceSettings";
 import { RulePreview } from "./components/RulePreview";
 import { Section } from "./components/Section";
 import { SwitchField } from "./components/SwitchField";
@@ -191,6 +192,12 @@ const GeneralPanel = ({
 
   return (
     <div className="single-column">
+      <Section title="Prices">
+        <PriceSettings
+          showPrices={settings.showPrices}
+          onShowPricesChange={(showPrices) => update({ showPrices })}
+        />
+      </Section>
       <Section title="Troubleshooting">
         <SwitchField
           label="Debug logging"

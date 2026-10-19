@@ -1,15 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { normalizeCardName, pickSuggestion } from "./card-search";
+import { pickSuggestion } from "./card-search";
 
 const suggest = (...labels: string[]) =>
   labels.map((label) => ({ label, value: label }));
-
-describe("normalizeCardName", () => {
-  it("removes accents, case and punctuation", () => {
-    expect(normalizeCardName("Lim-Dûl's Vault")).toBe("lim dul s vault");
-    expect(normalizeCardName("Fire // Ice")).toBe("fire ice");
-  });
-});
 
 describe("pickSuggestion", () => {
   it("prefers an exact match over a longer name", () => {

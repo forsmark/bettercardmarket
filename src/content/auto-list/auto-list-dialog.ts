@@ -1,4 +1,4 @@
-import { sendMessage } from "../../shared/messages";
+import { openOptionsPage } from "../../shared/messages";
 import { h } from "../lib/dom";
 import { type DeckEntry, parseDecklist } from "./decklist";
 
@@ -123,7 +123,7 @@ export const openAutoListDialog = ({
   closeButton.addEventListener("click", close);
   cancelButton.addEventListener("click", close);
   settingsButton.addEventListener("click", () => {
-    void sendMessage({ type: "open-options" });
+    void openOptionsPage();
   });
   textarea.addEventListener("input", update);
   textarea.addEventListener("keydown", (event) => {

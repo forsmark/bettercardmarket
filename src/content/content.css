@@ -183,3 +183,68 @@
   color: rgb(255 255 255 / 0.6);
   text-align: right;
 }
+
+/* Estimated prices on a wants list */
+
+/* A width of 1% makes the column only as wide as its content. */
+.bcm-price-col {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.bcm-price {
+  width: 1%;
+  padding: 0.5rem;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.bcm-price--pending {
+  color: rgb(255 255 255 / 0.4);
+}
+
+.bcm-price__total {
+  display: block;
+  font-weight: 600;
+}
+
+.bcm-price__unit {
+  display: block;
+  color: rgb(255 255 255 / 0.55);
+  font-size: 0.75rem;
+}
+
+.bcm-price__missing {
+  color: rgb(255 255 255 / 0.4);
+}
+
+.bcm-price-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin: 12px 0;
+  padding: 10px 14px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.04);
+  font-size: 0.9rem;
+}
+
+.bcm-price-summary__total {
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.bcm-price-summary__detail {
+  color: rgb(255 255 255 / 0.75);
+}
+
+.bcm-price-summary__source {
+  margin-left: auto;
+  color: rgb(255 255 255 / 0.5);
+  font-size: 0.8rem;
+}
